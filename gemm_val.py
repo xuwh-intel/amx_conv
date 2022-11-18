@@ -16,7 +16,6 @@ for line in lines[0:row]:
     input.append(temp)
 
 print("-----1----")
-print(input)
 
 fi = open("build/weight_plain.txt", 'r')
 lines = fi.readlines()
@@ -27,7 +26,6 @@ for line in lines:
     weight.append(temp)
 
 print("-----2----")
-print(weight)
 
 fi = open("build/output.txt", 'r')
 lines = fi.readlines()
@@ -43,17 +41,13 @@ it = torch.tensor(input)
 wt = torch.tensor(weight)
 ot = torch.tensor(output)
 
-print(it)
-print(wt)
-print(ot)
-
 print("-----4----")
 
 res = torch.matmul(it, wt)
 
 print("-----5----")
-print(ot)
-print(res)
+print(ot[0])
+print(res[0])
 
 print(torch.sum(ot))
 print(torch.sum(res))

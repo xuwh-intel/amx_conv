@@ -210,7 +210,7 @@ struct _tile_gemm_32x64 {
     _tile_loadd(TMM4, A_[0], lda);
     _tile_loadd(TMM5, A_[1], lda);
 
-    auto B_ = reinterpret_cast<int8_t (*)[16][64]>(B);
+    auto B_ = reinterpret_cast<int8_t (*)[lda / 4][64]>(B);
     _tile_loadd(TMM6, B_[0], 64);
     _tile_loadd(TMM7, B_[1], 64);
   }
@@ -242,16 +242,16 @@ struct _tile_gemm_32x64 {
     _tile_stored(TMM3, C_[1][0] + 16, 128);
   }
 
-  inline static void compute(void* A, const size_t lda, void* B, void* acc_pad) {
-    auto A_ = reinterpret_cast<int8_t (*)[16][lda]>(A);
-    auto B_ = reinterpret_cast<int8_t (*)[16][64]>(B);
+  inline static void compute(void* A, void* B, void* acc_pad, size_t k) {
+    auto A_ = reinterpret_cast<int8_t (*)[16][k]>(A);
+    auto B_ = reinterpret_cast<int8_t (*)[k / 4][64]>(B);
 
     //acc_pad has shape 4x4x16x16
     auto acc_pad_ = reinterpret_cast<int (*)[16][32]>(acc_pad);
     
     // acc_pad must be all 0s
     load_acc(acc_pad_);
-    dot_pro(A_, lda, B_);
+    dot_pro(A_, k, B_);
     store(acc_pad_);
   }
 

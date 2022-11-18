@@ -15,7 +15,7 @@
 
 int main(int argc, char* argv[]) {
   amx_init::amx_init();
-  intel_mlperf::Tilecfg().set_config();
-  intel_mlperf::test_conv_gemm(2097152, 64, 32);
+  intel_mlperf::Tilecfg(7).set_config(); // (27 + 1) / 4
+  intel_mlperf::test_conv_gemm(2097152, 28, 32);
   return 0;
 }
